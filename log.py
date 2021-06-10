@@ -2,6 +2,8 @@
 creates the console and file handlers for logging
 file handler is a timed rotating handler (rotating each day) and
 keeping backups for a week
+alternative would be rotatingfilehandler with some maxBytes so that we only
+keep a certain size of log, not certain time
 """
 import os
 import logging
@@ -25,6 +27,7 @@ def setup_logger(c):
     # log config
     log_config = {
         'version': 1,
+        'disable_existing_loggers': False,
         'formatters': {
             'fFormatter': {
                 'class': 'logging.Formatter',
@@ -63,9 +66,19 @@ def setup_logger(c):
 
 if __name__ == "__main__":
 
+    # need to set up the logger early on otherwise logging is lost
+    # e.g. when creating a Config object we log but don't see it (as debug level
+    # not present on console by default)
     c = Config()
     setup_logger(c)
+    # but now we see it as we have configured the logging to print out debug
+    d = Config()
 
     LOGGER = logging.getLogger(__name__)
     LOGGER.debug('Example debug msg')
-    LOGGER.warning('Example warning')
+
+    # other levels in descending order of seriousness:
+    # critical
+    # error
+    # warning
+    # info

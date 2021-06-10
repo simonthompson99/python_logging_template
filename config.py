@@ -6,9 +6,12 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
+
 class Config:
 
-    LOGGER.critical('Creating new config')
+    def __init__(self):
+
+        LOGGER.debug('Creating new config')
 
     debug = True
     log_dir = 'log'
